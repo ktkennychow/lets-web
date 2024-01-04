@@ -24,7 +24,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}>
         {children}
-        <Navbar />
       </body>
     </html>
   );
