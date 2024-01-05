@@ -13,10 +13,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useToast } from './ui/use-toast';
 
 const formSchema = z.object({
-  email: z.string().min(2).max(50),
-  password: z.string().min(2).max(50),
+  email: z
+    .string()
+    .min(1, { message: 'This field has to be filled.' })
+    .email('This is not a valid email.'),
+  password: z.string().min(6),
 });
 
 export function SignupForm() {
@@ -29,11 +34,18 @@ export function SignupForm() {
     },
   });
 
+  const router = useRouter();
+  const { toast } = useToast();
+
   const handleSignUpWithLocal = async (email: string, password: string) => {
     try {
       await signUpWithLocal(email, password);
-    } catch (error) {
-      console.log(error);
+      router.push('/dashboard/home');
+    } catch (error: any) {
+      toast({
+        title: error.code,
+        description: 'The email and/or password you entered is wrong',
+      });
     }
   };
 

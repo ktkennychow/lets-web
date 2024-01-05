@@ -4,6 +4,7 @@ import '@/styles/global.css';
 import { cn } from '@/lib/utils';
 import Header from '@/components/header';
 import { AuthContextProvider } from '@/context/AuthContext';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,6 +19,7 @@ export const fontSans = FontSans({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head />
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
@@ -25,8 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}>
         <AuthContextProvider>
           <Header />
-          {children}
+          <main>{children}</main>
         </AuthContextProvider>
+        <Toaster />
       </body>
     </html>
   );

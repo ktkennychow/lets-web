@@ -13,7 +13,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <div>
+    <div className='mx-auto flex w-80 flex-col gap-12'>
       <Button variant='outline' onClick={handleLoginWithGoogle}>
         Google Signup
       </Button>

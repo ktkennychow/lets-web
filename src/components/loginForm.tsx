@@ -6,6 +6,8 @@ import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+
 import {
   Form,
   FormControl,
@@ -16,7 +18,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/AuthContext';
-import { useState } from 'react';
 
 const formSchema = z.object({
   email: z
@@ -27,8 +28,6 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
-  // TODO setup hot toast
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const { signInWithLocal } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,14 +37,17 @@ export function LoginForm() {
     },
   });
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleLoginWithLocal = async (email: string, password: string) => {
     try {
       await signInWithLocal(email, password);
-
       router.push('/dashboard/home');
     } catch (error) {
-      setErrorMessage('Invalid credentials');
+      toast({
+        title: 'Invalid credentials',
+        description: 'The email and/or password you entered is wrong',
+      });
     }
   };
 

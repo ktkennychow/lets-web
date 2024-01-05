@@ -17,8 +17,6 @@ export default function Header() {
     }
   };
 
-  console.log(user);
-
   return (
     <div className='flex w-full flex-row items-center justify-between gap-10 p-4 md:gap-0'>
       <Link href='/'>
@@ -39,7 +37,7 @@ export default function Header() {
               <Button variant='outline'>Login</Button>
             </Link>
             <Link href='/auth/signup'>
-              <Button>Create an account</Button>
+              <Button>Signup</Button>
             </Link>
           </div>
         </div>
