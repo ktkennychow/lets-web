@@ -24,8 +24,7 @@ export default function Header() {
       </Link>
       {user ? (
         <div>
-          {user.email}
-          {user.name}
+          {user.username}
           <Button variant='outline' onClick={handleSignOut}>
             Log out
           </Button>
