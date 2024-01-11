@@ -41,10 +41,10 @@ export function SignupForm() {
     try {
       await signUpWithLocal(email, password);
       router.push('/dashboard/home');
-    } catch (error: any) {
+    } catch (error) {
       toast({
-        title: error.code,
-        description: 'The email and/or password you entered is wrong',
+        title: 'Something is wrong',
+        description: 'Please contact us.',
       });
     }
   };

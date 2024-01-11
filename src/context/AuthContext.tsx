@@ -35,16 +35,18 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser({
-          email: user.email,
-          uid: user.uid,
-          username: null,
-        });
         const getUsername = async () => {
           const savedUser = await axios.get(`${backendURL}/users/${user.uid}`);
-          console.log(savedUser.data.username);
           if (savedUser.data.username) {
             setUser({ ...user, username: savedUser.data.username });
+          } else {
+            const username = user.displayName || user.email?.split('@')[0];
+            axios.post(`${backendURL}/users`, {
+              firebase_uid: user.uid,
+              email: user.email,
+              username: username,
+            });
+            setUser({ ...user, username: username || null });
           }
         };
         getUsername();
@@ -62,54 +64,27 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     const provider = new GoogleAuthProvider();
 
     try {
-      const { user } = await signInWithPopup(auth, provider);
-
-      const savedUser = await axios.get(`${backendURL}/users/${user.uid}`);
-      if (savedUser.data) {
-        setUser({ ...user, username: savedUser.data.username });
-      } else {
-        axios.post(`${backendURL}/users`, {
-          firebase_uid: user.uid,
-          email: user.email,
-          username: user.displayName,
-        });
-        setUser({ ...user, username: user.displayName });
-      }
-    } catch (error) {
-      console.error('Error signing in with Google', error);
+      await signInWithPopup(auth, provider);
+    } catch (error: any) {
+      throw new Error('Error signing in with Google', error);
     }
   };
 
   // Sign up the user
   const signUpWithLocal = async (email: string, password: string) => {
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-
-      if (user) {
-        let username = user.email?.split('@')[0];
-        axios.post(`${backendURL}/users`, {
-          firebase_uid: user.uid,
-          email: user.email,
-          username: username,
-        });
-        setUser({ ...user, username: username! });
-      }
-    } catch (error) {
-      console.error('Error signing up with Local', error);
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      throw new Error('Error signing up with Local', error);
     }
   };
 
   // Login the user
   const signInWithLocal = async (email: string, password: string) => {
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-
-      const savedUser = await axios.get(`${backendURL}/users/${user.uid}`);
-      if (savedUser.data) {
-        setUser({ ...user, username: savedUser.data.username });
-      }
-    } catch (error) {
-      console.error('Error signing in with Local', error);
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      throw new Error('Error signing in with Local', error);
     }
   };
 
@@ -118,8 +93,8 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     try {
       setUser({ email: null, uid: null, username: null });
       signOut(auth);
-    } catch (error) {
-      console.error('Error signing out with Google', error);
+    } catch (error: any) {
+      throw new Error('Error signing out', error);
     }
   };
 
