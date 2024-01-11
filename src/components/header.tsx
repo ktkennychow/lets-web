@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <div className='flex w-full flex-row items-center justify-between gap-10 p-4 md:gap-0'>
-      <Link href='/'>
+      <Link href={user ? '/home' : '/'}>
         <div className='text-3xl font-extrabold italic tracking-[-0.1em]'>LETS</div>
       </Link>
       {user ? (
@@ -32,10 +32,10 @@ export default function Header() {
       ) : (
         <div>
           <div className='flex flex-row gap-6'>
-            <Link href='/auth/login'>
+            <Link href='/login'>
               <Button variant='outline'>Login</Button>
             </Link>
-            <Link href='/auth/signup'>
+            <Link href='/signup'>
               <Button>Signup</Button>
             </Link>
           </div>

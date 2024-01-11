@@ -10,7 +10,7 @@ export default function LoginPage() {
   const handleLoginWithGoogle = async () => {
     try {
       await signInWithGoogle();
-      router.push('/dashboard/home');
+      router.push('/home');
     } catch (error) {
       console.log(error);
     }

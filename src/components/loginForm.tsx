@@ -42,7 +42,7 @@ export function LoginForm() {
   const handleLoginWithLocal = async (email: string, password: string) => {
     try {
       await signInWithLocal(email, password);
-      router.push('/dashboard/home');
+      router.push('/home');
     } catch (error) {
       toast({
         title: 'Invalid credentials',

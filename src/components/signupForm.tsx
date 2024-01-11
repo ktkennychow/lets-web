@@ -40,7 +40,7 @@ export function SignupForm() {
   const handleSignUpWithLocal = async (email: string, password: string) => {
     try {
       await signUpWithLocal(email, password);
-      router.push('/dashboard/home');
+      router.push('/home');
     } catch (error) {
       toast({
         title: 'Something is wrong',
